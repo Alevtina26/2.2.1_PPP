@@ -93,6 +93,14 @@ public class User {
 
    @Override
    public int hashCode() {
-      return Objects.hash(getId(), getFirstName(), getLastName(), getEmail(), getCar());
+      return Objects.hash(getId(),
+              getFirstName(), getLastName(),
+              getEmail(), getCar());
+   }
+
+   public boolean isEmpty() {
+      return getFirstName().isEmpty()
+              && getLastName().isEmpty()
+              && getEmail().isEmpty();
    }
 }

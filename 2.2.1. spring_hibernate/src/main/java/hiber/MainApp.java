@@ -6,15 +6,11 @@ import hiber.model.User;
 import hiber.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.sql.SQLException;
 import java.util.List;
-import javax.persistence.NoResultException;
 
 public class MainApp {
-   public static void main(String[] args) throws SQLException {
-      AnnotationConfigApplicationContext context =
-              new AnnotationConfigApplicationContext(AppConfig.class);
-
+   public static void main(String[] args) {
+      AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
       UserService userService = context.getBean(UserService.class);
 
       // Создание и добавление пользователей с машинами
@@ -24,6 +20,7 @@ public class MainApp {
       Car car1 = new Car("KIA", 5);
       Car car2 = new Car("BMW", 10);
       Car car3 = new Car("Mazda", 15);
+
       user1.setCar(car1);
       user2.setCar(car2);
       user3.setCar(car3);
@@ -41,12 +38,24 @@ public class MainApp {
          System.out.println("Car: " + user.getCar());
       }
 
+      // Получение пользователей по автомобилю KIA
+      printUsersByCar(userService, "KIA", 5);
 
-      User user4 = userService.getUserByCar("Audi", 20);
-      System.out.println(user4);
-      User user5 = userService.getUserByCar("KIA", 5);
-      System.out.println(user5);
+      // Получение пользователей по автомобилю Audi
+      printUsersByCar(userService, "Audi", 20);
 
       context.close();
+   }
+
+   private static void printUsersByCar(UserService userService, String model, int series) {
+      List<User> usersWithCar = userService.getUserByCar(model, series);
+
+      if (usersWithCar.isEmpty()) {
+         System.out.println("Пользователя с автомобилем " + model + " и серией " + series + " не существует.");
+      } else {
+         for (User user : usersWithCar) {
+            System.out.println(user);
+         }
+      }
    }
 }
